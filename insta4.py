@@ -9,7 +9,7 @@ import json
 from pandas.io.json import json_normalize
 import pandas as pd, numpy as np
 import pprint
-import pickle
+import pickle 
 
 with open ('links_list', 'rb') as fp:
     links = pickle.load(fp)
