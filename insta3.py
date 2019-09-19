@@ -13,62 +13,66 @@ import pickle
 
 
 username='choiza11'
-browser = webdriver.Chrome('/Users/yongjae/Downloads/chromedriver') # 'type chromedriver' in cmd
-browser.get('https://www.instagram.com/'+username+'/?hl=en')
+driver = webdriver.Chrome('/Users/yongjae/Downloads/chromedriver') # 'type chromedriver' in cmd
+driver.get('https://www.instagram.com/'+username+'/?hl=en')
 
-
-Pagelength = browser.execute_script("window.scrollTo(0, document.body.scrollHeight/1.5);")
-
+page_count = 10
 links=[]
-source = browser.page_source
-data=bs(source, 'html.parser')
-body = data.find('body')
-script = body.find('span')
-for link in script.findAll('a'):
-     if re.match("/p", link.get('href')):
-        links.append('https://www.instagram.com'+link.get('href'))
 
-# time.sleep(5)
+#  scroll height 참조:
+# https://cnpnote.tistory.com/entry/PYTHON-%ED%8C%8C%EC%9D%B4%EC%8D%AC%EC%97%90%EC%84%9C-selenium-webdriver%EB%A5%BC-%EC%82%AC%EC%9A%A9%ED%95%98%EC%97%AC-%EC%9B%B9-%ED%8E%98%EC%9D%B4%EC%A7%80%EB%A5%BC-%EC%8A%A4%ED%81%AC%EB%A1%A4%ED%95%98%EB%8A%94-%EB%B0%A9%EB%B2%95%EC%9D%80-%EB%AC%B4%EC%97%87%EC%9E%85%EB%8B%88%EA%B9%8C
 
-# Pagelength = browser.execute_script("window.scrollTo(document.body.scrollHeight/1.5, document.body.scrollHeight/3.0);")
+SCROLL_PAUSE_TIME = 0.5
 
-# source = browser.page_source
-# data=bs(source, 'html.parser')
-# body = data.find('body')
-# script = body.find('span')
-# for link in script.findAll('a'):
-#      if re.match("/p", link.get('href')):
-#         links.append('https://www.instagram.com'+link.get('href'))
+# Get scroll height
+last_height = driver.execute_script("return document.body.scrollHeight")
+
+while True:
+    # Scroll down to bottom
+    driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+
+    # extract information
+    source = driver.page_source
+    data=bs(source, 'html.parser')
+    body = data.find('body')
+    script = body.find('span')
+    for link in script.findAll('a'):
+        if re.match("/p", link.get('href')):
+            links.append('https://www.instagram.com'+link.get('href'))
+    
+    # Wait to load page
+    time.sleep(5)
+    # time.sleep(SCROLL_PAUSE_TIME)
+
+    # Calculate new scroll height and compare with last scroll height
+    new_height = driver.execute_script("return document.body.scrollHeight")
+    if new_height == last_height:
+        break
+    last_height = new_height
+
+# def collect_links(h0, dvd_num):
+#     Pagelength = driver.execute_script("window.scrollTo("+h0+",document.body.scrollHeight/"+dvd_num+");")
+#     source = driver.page_source
+#     data=bs(source, 'html.parser')
+#     body = data.find('body')
+#     script = body.find('span')
+#     for link in script.findAll('a'):
+#         if re.match("/p", link.get('href')):
+#             links.append('https://www.instagram.com'+link.get('href'))
+#     time.sleep(5)
+
+# h0 = '0'
+# for i in range(1, page_count):
+#     collect_links(h0, str(1*page_count))
+#     h0 = 'document.body.scrollHeight/{0}'.format(1*page_count)
+
+driver.quit()
 
 with open('links_list', 'wb') as fp:
     pickle.dump(links, fp)
 
 pp = pprint.PrettyPrinter(indent=4)
 pp.pprint(links)
-
-
-
-# page = urlopen(links[0]).read()
-
-# result=pd.DataFrame()
-# for i in range(len(links)):
-#     try:
-#         page = urlopen(links[i]).read()
-#         data=bs(page, 'html.parser')
-#         body = data.find('body')
-#         script = body.find('script')
-#         raw = script.text.strip().replace('window._sharedData =', '').replace(';', '')
-#         json_data=json.loads(raw)
-#         posts =json_data['entry_data']['PostPage'][0]['graphql']
-#         posts= json.dumps(posts)
-#         posts = json.loads(posts)
-#         x = pd.DataFrame.from_dict(json_normalize(posts), orient='columns') 
-#         x.columns =  x.columns.str.replace("shortcode_media.", "")
-#         result=result.append(x)
-       
-#     except:
-#         np.nan
-# Just check for the duplicates
-# result = result.drop_duplicates(subset = 'shortcode')
-# result.index = range(len(result.index))
-# pp.pprint(result)
+set_links = set(links)
+print(len(links))
+print(len(set_links))
