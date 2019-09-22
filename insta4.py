@@ -8,16 +8,26 @@ from urllib.request import urlopen
 import json
 from pandas.io.json import json_normalize
 import pandas as pd, numpy as np
+<<<<<<< HEAD
 import pickle 
 import pprint
 pp = pprint.PrettyPrinter(indent=4)
+=======
+import pprint
+import pickle 
+>>>>>>> 753eac7281095afddd34dd708c09d947fa3ca6f0
 
 with open ('links_list', 'rb') as fp:
     links = pickle.load(fp)
 
+<<<<<<< HEAD
 set_links = set(links)
 links = list(set_links)
 pp.pprint(links[0])
+=======
+pp = pprint.PrettyPrinter(indent=4)
+pp.pprint(links)
+>>>>>>> 753eac7281095afddd34dd708c09d947fa3ca6f0
 
 page = urlopen(links[0]).read()
 data=bs(page, 'html.parser')
@@ -26,6 +36,7 @@ script = body.find('script')
 raw = script.text.strip().replace('window._sharedData =', '').replace(';', '')
 json_data=json.loads(raw)
 posts =json_data['entry_data']['PostPage'][0]['graphql']
+<<<<<<< HEAD
 posts= json.dumps(posts, ensure_ascii=False)
 posts = json.loads(posts)
 
@@ -57,3 +68,10 @@ text = edges[i]["node"]["edge_media_to_caption"]["edges"][0]["node"]["text"]
 
 x = pd.DataFrame.from_dict(json_normalize(posts), orient='columns') 
 x.columns =  x.columns.str.replace("shortcode_media.", "")
+=======
+posts= json.dumps(posts)
+posts = json.loads(posts)
+x = pd.DataFrame.from_dict(json_normalize(posts), orient='columns') 
+x.columns =  x.columns.str.replace("shortcode_media.", "")
+pp.pprint(posts) 
+>>>>>>> 753eac7281095afddd34dd708c09d947fa3ca6f0
