@@ -15,17 +15,20 @@ from langdetect import detect_langs
 # dtypes = ['datetime', 'datetime', 'str', 'float']
 # pd.read_csv(file, sep='\t', header=None, names=headers, dtype=dtypes)
 
-path='/home/yong_inline/frint/files/post_info/'
+path='../../files/post_info/'
 files = glob.glob(path+"raw_files/post_info_*.csv") 
 df_list = []
 for filename in sorted(files):
     df_list.append(pd.read_csv(filename))
 df = pd.concat(df_list)
 df = df[~df['text'].isna()]
+df = df[df['is_ad']!='False']
 df = df.reset_index()
-df = df.drop(['index','Unnamed: 0'], axis=1)
+df = df.drop(['index','Unnamed: 0','tracking_token'], axis=1)
 
 today = datetime.now().strftime("%Y%m%d")
+
+df.to_csv(path+'merge/posts_'+today+'_raw.csv', index=False)
 
 def detect_func(lyrics):
     try:
@@ -46,6 +49,7 @@ def text_munging(df):
     
     # language detection
     df['lang'] = df['text'].apply(detect_func) 
+    return df
 
 def hashtag_extract(df):    
     # hashtag 추출하기
@@ -60,7 +64,10 @@ def hashtag_extract(df):
 text_munging(df)
 # hashtag_extract(df)
 
-df.to_csv(path+'merge/posts_'+today+'.csv', index=False)
+df.to_csv(path+'merge/posts_'+today+'_munging.csv', index=False)
+
+
+# additional analysis -> colab
 df = pd.read_csv(path+'merge/posts_'+today+'.csv')
 
 df[['loc_name','lang','text','hashtag']][10010:10011]

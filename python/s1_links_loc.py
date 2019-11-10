@@ -31,19 +31,16 @@ options.add_argument("disable-infobars")
 options.add_argument("--disable-extensions")
 options.add_argument("disable-gpu")
 
-# files_path = '/Users/yongjae/Documents/layerbylayer/insta/frint/files/'
-files_path = '../files/'
+
+files_path = '../../files/'
 email = sys.argv[1]
 password = sys.argv[2]
 location_path = files_path+'location_info/'+sys.argv[3] 
 output_filenm = sys.argv[4] # 'location_info.csv'
-# location_path = files_path+'location_info/location_ids.csv'
 
 location_ids = pd.read_csv(location_path)
 location_ids['loc_id'] = location_ids['loc_id'].astype('str')
 
-# chrome_path = '/Users/user/Downloads/chromedriver'
-# chrome_path = '/Users/yongjae/Downloads/chromedriver'
 chrome_path = '/usr/bin/chromedriver'
 
 driver = webdriver.Chrome(chrome_path, chrome_options=options)
