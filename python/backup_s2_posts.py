@@ -28,7 +28,7 @@ df = pd.DataFrame(columns = cols)
 for i in range(0, len(links)):
     lk = links[i]
     page = urlopen(lk).read()
-    data=bs(page, 'html.parser')
+    data = bs(page, 'html.parser')
     body = data.find('body')
     script = body.find('script')
     raw = script.text.strip().replace('window._sharedData =', '').replace(';', '')
@@ -51,10 +51,10 @@ for i in range(0, len(links)):
     res = json_normalize(dict(zip(cols, res)))
     df = df.append(res,ignore_index=True, sort=False)
     print(df.tail(5))
-    time.sleep(1+uniform(-0.2,0.2))
+    time.sleep(2+uniform(-0.2,0.2))
 
 today = datetime.now().strftime("%Y%m%d")
-filenm = username+"_post_info_"+today+".csv"
+filenm = links_list+"_post_info_"+today+".csv"
 df.to_csv(filenm, mode='w')
 df = pd.read_csv(filenm, index_col=0)
 print(df.head())
