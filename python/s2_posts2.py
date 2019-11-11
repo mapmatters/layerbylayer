@@ -36,7 +36,7 @@ chrome_path = '/usr/bin/chromedriver'
 strart_i = int(sys.argv[1])
 export_folder = sys.argv[2]
 
-files_path = '../files/'
+files_path = '../../files/'
 filenames = glob.glob(files_path + "post_urls/post_*.csv")
 dfs = pd.DataFrame()
 df_list = []

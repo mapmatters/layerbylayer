@@ -16,7 +16,7 @@ location_ids = [
         ]
 
 location_df = pd.DataFrame(location_ids, columns=['name','loc_id'])
-path = '../files/location_info/'
+path = '../../files/location_info/'
 location_df.to_csv(path+'location_ids.csv', index=False)
 
 location_ids = [
@@ -41,5 +41,5 @@ location_ids = [
         ]
 
 location_df = pd.DataFrame(location_ids, columns=['name','loc_id'])
-path = '../files/location_info/'
+path = '../../files/location_info/'
 location_df.to_csv(path+'location_ids_2.csv', index=False)

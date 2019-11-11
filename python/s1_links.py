@@ -37,6 +37,7 @@ link_type=sys.argv[1] ; print(link_type)
 _id_=sys.argv[2] ; print(_id_)
 email=sys.argv[3]
 password=sys.argv[4]
+num_of_links = int(sys.argv[5])
 
 chrome_path = '/usr/bin/chromedriver'
 
@@ -71,7 +72,6 @@ else:
     sys.exit(0)
 
 links=[]
-num_of_links = 3000
 
 #  scroll height 참조:
 # https://cnpnote.tistory.com/entry/PYTHON-%ED%8C%8C%EC%9D%B4%EC%8D%AC%EC%97%90%EC%84%9C-selenium-webdriver%EB%A5%BC-%EC%82%AC%EC%9A%A9%ED%95%98%EC%97%AC-%EC%9B%B9-%ED%8E%98%EC%9D%B4%EC%A7%80%EB%A5%BC-%EC%8A%A4%ED%81%AC%EB%A1%A4%ED%95%98%EB%8A%94-%EB%B0%A9%EB%B2%95%EC%9D%80-%EB%AC%B4%EC%97%87%EC%9E%85%EB%8B%88%EA%B9%8C
