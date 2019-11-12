@@ -15,19 +15,26 @@ from langdetect import detect_langs
 # dtypes = ['datetime', 'datetime', 'str', 'float']
 # pd.read_csv(file, sep='\t', header=None, names=headers, dtype=dtypes)
 
-path='../../files/post_info/'
-files = glob.glob(path+"raw_files/post_info_*.csv") 
+path='/home/yong_inline/files/post_info/'
+files = glob.glob(path+"raw_files_2/post_info_*.csv") 
+today = datetime.now().strftime("%Y%m%d")
+
 df_list = []
 for filename in sorted(files):
     df_list.append(pd.read_csv(filename))
-df = pd.concat(df_list)
-df = df[~df['text'].isna()]
-df = df[df['is_ad']==False]
+df = pd.concat(df_list) ; len(df)
+df = df[~df['text'].isna()] ; len(df)
+df = df[df['is_ad']==False] ; len(df)
 df = df.reset_index()
-df = df.drop(['index','Unnamed: 0','tracking_token'], axis=1)
+
+df.to_csv(path+'merge/posts_'+today+'_raw.csv', index=False)
+
+try:
+    df = df.drop(['index','Unnamed: 0','tracking_token'], axis=1)
+except KeyError:
+    df = df.drop(['index','Unnamed: 0'], axis=1)
 
 
-today = datetime.now().strftime("%Y%m%d")
 
 def detect_func(lyrics):
     try:
@@ -62,8 +69,13 @@ def hashtag_extract(df):
 text_munging(df)
 # hashtag_extract(df)
 
-df.to_csv(path+'merge/posts_'+today+'.csv', index=False)
-df = pd.read_csv(path+'merge/posts_'+today+'.csv')
+df.to_csv(path+'merge/posts_'+today+'_munging.csv', index=False)
+df = pd.read_csv(path+'merge/posts_'+today+'_munging.csv', encoding='utf-8', engine='python')
+
+df_grp = df[['loc_name','text','lang']].groupby(['loc_name','lang']).count().sort_values('text', ascending=False)
+
+# 장소별 갯수
+pd.pivot_table(df, index=['loc_name','loc_id','lang'], aggfunc='count').text
 
 
 
