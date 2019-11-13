@@ -15,17 +15,16 @@ from langdetect import detect_langs
 # dtypes = ['datetime', 'datetime', 'str', 'float']
 # pd.read_csv(file, sep='\t', header=None, names=headers, dtype=dtypes)
 
-path='/home/yong_inline/files/post_info/'
-files = glob.glob(path+"raw_files_2/post_info_*.csv") 
-today = datetime.now().strftime("%Y%m%d")
-
+path='../../files/post_info/'
+files = glob.glob(path+"raw_files/post_info_*.csv") 
 df_list = []
 for filename in sorted(files):
     df_list.append(pd.read_csv(filename))
-df = pd.concat(df_list) ; len(df)
-df = df[~df['text'].isna()] ; len(df)
-df = df[df['is_ad']==False] ; len(df)
+df = pd.concat(df_list)
+df = df[~df['text'].isna()]
+df = df[df['is_ad']!='False']
 df = df.reset_index()
+df = df.drop(['index','Unnamed: 0','tracking_token'], axis=1)
 
 df.to_csv(path+'merge/posts_'+today+'_raw.csv', index=False)
 
@@ -35,6 +34,8 @@ except KeyError:
     df = df.drop(['index','Unnamed: 0'], axis=1)
 
 
+
+df.to_csv(path+'merge/posts_'+today+'_raw.csv', index=False)
 
 def detect_func(lyrics):
     try:
@@ -55,6 +56,7 @@ def text_munging(df):
     
     # language detection
     df['lang'] = df['text'].apply(detect_func) 
+    return df
 
 def hashtag_extract(df):    
     # hashtag 추출하기
@@ -70,42 +72,10 @@ text_munging(df)
 # hashtag_extract(df)
 
 df.to_csv(path+'merge/posts_'+today+'_munging.csv', index=False)
-df = pd.read_csv(path+'merge/posts_'+today+'_munging.csv', encoding='utf-8', engine='python')
-
-df_grp = df[['loc_name','text','lang']].groupby(['loc_name','lang']).count().sort_values('text', ascending=False)
-
-# 장소별 갯수
-pd.pivot_table(df, index=['loc_name','loc_id','lang'], aggfunc='count').text
 
 
-
-# df[['loc_name','lang','text','hashtag']][10010:10011]
-
-# df[['loc_name','index']].groupby('loc_name').count().sort_values('hashtag',ascending=False)
-
-# df[['text_raw','tmp']].head(20)
-# df.groupby('tmp').count().sort_values('index',ascending=False).head(10)
-# df['tmp2'] = df['tmp'].apply(lambda x: x.detect_language())
-
-# df2['hashtag'] = df2['hashtag'].apply(lambda x: np.array(x))
-# type(df2['hashtag'])
-
-
-# df2 = df_text[df_text['hashtag_num']>0]
-
-# grouped = df2.groupby(df2['hashtag_num'])
-# grouped.count()
-
-import google.cloud.bigquery.magics
-google.cloud.bigquery.magics.context.use_bqstorage_api = True
-from google.cloud import bigquery
-import pandas_gbq as gbq
-from google.cloud.bigquery import Client, SchemaField
-from google.oauth2 import service_account
-import google.auth
-credentials, your_project_id = google.auth.default(
-    scopes=["https://www.googleapis.com/auth/cloud-platform"]
-)
+# additional analysis -> colab
+df = pd.read_csv(path+'merge/posts_'+today+'.csv')
 
 bqclient = bigquery.Client(
     credentials=credentials,
