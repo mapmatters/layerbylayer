@@ -153,7 +153,7 @@ bot.collectItems(sys.argv[3], sys.argv[4], sys.argv[5])
 bot.closeBrowser()
 
 # 예시
-bot = InstagramBot('matmatters', 'qkrtjqkd132!')
+bot = InstagramBot('matmatters', 'password')
 bot.signIn()
 bot.collectItems('loc', '486650968033082', '1000')
 bot.closeBrowser()
