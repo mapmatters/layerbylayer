@@ -1,0 +1,7 @@
+{
+"type": "FeatureCollection",
+"features": [
+{ "type": "Feature", "properties": { "store_nm": "빨간떡볶이", "description": "완존맛남", "store_nm_eng": null, "x_coord": 126.8885229, "y_coord": 37.4981433, "address": "시 동작구 신대방동 361-39", "address_eng": null, "tel": "02-812-3449", "hashtag_link": "https:\/\/www.instagram.com\/explore\/tags\/%EB%B9%A8%EA%B0%84%EB%96%A1%EB%B3%B6%EC%9D%B4\/", "location_link": "https:\/\/www.instagram.com\/explore\/locations\/818784090\/" }, "geometry": { "type": "Point", "coordinates": [ 126.8885229, 37.4981433 ] } },
+{ "type": "Feature", "properties": { "store_nm": "대한옥", "description": "꼬리찜", "store_nm_eng": null, "x_coord": 126.9086488, "y_coord": 37.5193289, "address": "서울특별시 영등포구 영등포동 영등포로51길 6", "address_eng": null, "tel": null, "hashtag_link": "https:\/\/www.instagram.com\/explore\/tags\/%EB%8C%80%ED%95%9C%EC%98%A5\/", "location_link": "https:\/\/www.instagram.com\/explore\/locations\/1022288342\/" }, "geometry": { "type": "Point", "coordinates": [ 126.9086488, 37.5193289 ] } }
+]
+}

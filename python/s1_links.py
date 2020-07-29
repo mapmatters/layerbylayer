@@ -25,7 +25,7 @@ from bs4 import BeautifulSoup as bs
 pp = pprint.PrettyPrinter(indent=4)
 
 options = webdriver.ChromeOptions()
-options.add_argument('--headless')
+# options.add_argument('--headless')
 options.add_argument('window-size=1920x1080')
 options.add_argument("start-maximized")
 options.add_argument("disable-infobars")
